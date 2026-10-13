@@ -19,7 +19,7 @@
  "knowsAbout":["تصميم مواقع","برمجة تطبيقات","متاجر إلكترونية","أنظمة إدارة"]}
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Readex+Pro:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Readex+Pro:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <style>
 :root{
   --navy:#0A1B33; --navy-2:#11284A; --cyan:#12C2E9; --cyan-ink:#06121F;
@@ -73,6 +73,12 @@ legend{font-weight:600;font-size:14.5px;margin:0 0 8px;padding:0}
 .result{background:var(--navy);color:#fff;border-radius:10px;padding:16px 18px;margin:6px 0 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .result .num{font-size:26px;font-weight:700;color:var(--cyan)}
 .result small{display:block;color:#9FB0C7;font-size:12.5px}
+.result s{display:block;color:#9FB0C7;font-size:15px;text-decoration-thickness:2px}
+.offer{display:inline-flex;align-items:center;gap:10px;background:var(--cyan);color:var(--cyan-ink);font-weight:700;
+       border-radius:999px;padding:6px 6px 6px 16px;font-size:15px;margin-top:6px}
+.offer b{background:var(--navy);color:#fff;border-radius:999px;padding:3px 12px;font-family:"Readex Pro",sans-serif}
+.offer small{font-weight:500}
+.calc .tag{display:inline-block;background:rgba(18,194,233,.14);color:var(--ink);border:1px solid var(--cyan);border-radius:6px;padding:2px 8px;font-size:13px;font-weight:600;margin-inline-start:6px}
 .cta{width:100%;justify-content:center;font-size:17px;padding:14px;border:0;cursor:pointer;font-family:inherit}
 .fine{color:var(--muted);font-size:12.5px;margin:10px 0 0;text-align:center}
 
@@ -127,6 +133,7 @@ footer img{height:30px}
 <section class="hero">
   <div class="wrap">
     <div>
+      <div class="offer" id="offer" hidden><b id="offer-pct">30%</b><span>خصم على أول مشروع <small id="offer-until"></small></span></div>
       <h1>اعرف تكلفة موقعك أو تطبيقك قبل ما تكلم حد</h1>
       <p class="lead">اختار نوع المشروع والمميزات اللي محتاجها، وهيظهرلك تقدير مبدئي للسعر. ولو مناسب، ابعته لنا على واتساب ونرد عليك بتصور كامل.</p>
       <div class="proof">
@@ -137,7 +144,7 @@ footer img{height:30px}
     </div>
 
     <form class="calc" id="calc" aria-label="حاسبة التكلفة" style="scroll-margin-top:16px">
-      <h2>حاسبة التكلفة</h2>
+      <h2>حاسبة التكلفة <span class="tag" id="calc-tag" hidden></span></h2>
       <p class="hint">كل اختيار بيحدّث السعر على طول.</p>
 
       <fieldset>
@@ -181,7 +188,7 @@ footer img{height:30px}
       </fieldset>
 
       <div class="result" aria-live="polite">
-        <div><small>التكلفة التقريبية</small><span class="num" id="price">—</span></div>
+        <div><small id="price-label">التكلفة التقريبية</small><s id="price-old" hidden></s><span class="num" id="price">—</span></div>
         <div><small>مدة التنفيذ</small><b id="time">—</b></div>
       </div>
       <button class="wa-btn cta" type="submit">ابعتلي عرض سعر على واتساب</button>
@@ -243,14 +250,17 @@ footer img{height:30px}
    رقم واتساب عتاد بالصيغة الدولية من غير + ولا مسافات (مصر: 20 + الرقم من غير الصفر الأول) */
 const WHATSAPP = "201104549752";
 /* الأسعار: [أقل، أكتر] بالجنيه المصري — غيّرها حسب أسعارك */
-const BASE = { site:[8000,15000], store:[20000,40000], app:[45000,90000], system:[35000,80000] };
+const BASE = { site:[12000,25000], store:[25000,50000], app:[50000,100000], system:[45000,90000] };
 const ADDONS = { pay:[5000,8000], book:[6000,10000], admin:[8000,14000], accounts:[4000,7000], delivery:[10000,18000], lang:[4000,6000] };
+/* العرض: نسبة الخصم وآخر يوم فيه (YYYY-MM-DD). بعد التاريخ ده الخصم بيختفي لوحده. خليه 0 عشان تلغيه */
+const DISCOUNT = 30;
+const DISCOUNT_UNTIL = "2026-12-13";
 const WEEKS = { site:[2,3], store:[4,6], app:[8,12], system:[6,10] };
 /* أسعار السوق: سعر الخليج = سعر مصر × multiplier ثم يتحول للعملة */
 const MARKETS = {
   eg:   { cur:"جنيه",  rate:1,     mult:1,   label:"مصر" },
-  sa:   { cur:"ريال",  rate:1/13,  mult:1.6, label:"السعودية" },
-  gulf: { cur:"دولار", rate:1/50,  mult:1.6, label:"الخليج" },
+  sa:   { cur:"ريال",  rate:1/13,  mult:5,   label:"السعودية" },
+  gulf: { cur:"دولار", rate:1/50,  mult:5,   label:"الخليج" },
 };
 /* تتبع الإعلانات (اختياري): سيبهم فاضيين لحد ما تبدأ إعلانات
    Google Ads: من Goals ← Conversions ← هتلاقي AW-XXXXXXXXX و Label  |  Meta Pixel: من Events Manager */
@@ -297,11 +307,31 @@ function state(){
   const m = MARKETS[market], d = parseFloat(design);
   lo = round(lo * d * m.mult * m.rate); hi = round(hi * d * m.mult * m.rate);
   const w = WEEKS[type], extra = Math.ceil(feats.length / 2);
-  return { type, design, market, feats, lo, hi, cur:m.cur, weeks:[w[0] + extra, w[1] + extra] };
+  const pct = 100 - (offerActive() ? DISCOUNT : 0);
+  return { type, design, market, feats, lo, hi, dlo: round(lo * pct / 100), dhi: round(hi * pct / 100), cur:m.cur, weeks:[w[0] + extra, w[1] + extra] };
 }
+function offerActive(){
+  if (!DISCOUNT) return false;
+  if (!DISCOUNT_UNTIL) return true;
+  return new Date() <= new Date(DISCOUNT_UNTIL + "T23:59:59");
+}
+function showOffer(){
+  const on = offerActive();
+  document.getElementById("offer").hidden = !on;
+  const tag = document.getElementById("calc-tag"); tag.hidden = !on; tag.textContent = `خصم ${DISCOUNT}%`;
+  document.getElementById("offer-pct").textContent = `${DISCOUNT}%`;
+  if (on && DISCOUNT_UNTIL) document.getElementById("offer-until").textContent =
+    "· لحد " + new Date(DISCOUNT_UNTIL + "T12:00:00").toLocaleDateString("ar-EG", {day:"numeric", month:"long"});
+}
+showOffer();
 function render(){
   const s = state();
-  document.getElementById("price").textContent = `${s.lo.toLocaleString("en-US")} – ${s.hi.toLocaleString("en-US")} ${s.cur}`;
+  const fmtR = (a,b) => `${a.toLocaleString("en-US")} – ${b.toLocaleString("en-US")} ${s.cur}`;
+  const on = offerActive();
+  document.getElementById("price").textContent = on ? fmtR(s.dlo, s.dhi) : fmtR(s.lo, s.hi);
+  const old = document.getElementById("price-old");
+  old.hidden = !on; old.textContent = fmtR(s.lo, s.hi);
+  document.getElementById("price-label").textContent = on ? `التكلفة بعد خصم ${DISCOUNT}%` : "التكلفة التقريبية";
   document.getElementById("time").textContent = `${s.weeks[0]} إلى ${s.weeks[1]} أسابيع`;
   document.getElementById("wa-top").href = document.getElementById("wa-float").href = waLink("أهلًا، عايز أستفسر عن خدماتكم.");
 }
@@ -314,7 +344,9 @@ function message(){
     `• المميزات: ${s.feats.length ? s.feats.map(f => FNAMES[f]).join("، ") : "الأساسي"}`,
     `• التصميم: ${DNAMES[s.design]}`,
     `• المكان: ${MARKETS[s.market].label}`,
-    `• التقدير من الحاسبة: ${s.lo.toLocaleString("en-US")} – ${s.hi.toLocaleString("en-US")} ${s.cur}`,
+    offerActive()
+      ? `• التقدير بعد خصم ${DISCOUNT}%: ${s.dlo.toLocaleString("en-US")} – ${s.dhi.toLocaleString("en-US")} ${s.cur} (بدل ${s.lo.toLocaleString("en-US")} – ${s.hi.toLocaleString("en-US")})`
+      : `• التقدير من الحاسبة: ${s.lo.toLocaleString("en-US")} – ${s.hi.toLocaleString("en-US")} ${s.cur}`,
     source ? `(وصلتلكم من: ${source})` : "",
   ].filter(Boolean).join("\n");
 }
