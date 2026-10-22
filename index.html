@@ -160,6 +160,39 @@ footer .copy{width:100%;font-size:13px;color:#7F92AA;border-top:1px solid #1F335
   .calc{padding:18px}
   footer{padding-bottom:84px}
 }
+
+/* promo band + countdown */
+.promo{background:linear-gradient(90deg,#0E2A47,#11284A);color:#fff;border-bottom:1px solid #1F3A5E}
+.promo .wrap{display:flex;align-items:center;justify-content:space-between;gap:14px 20px;flex-wrap:wrap;padding-block:14px}
+.promo .pmsg{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.promo .pct{background:var(--cyan);color:var(--cyan-ink);font-family:"Readex Pro",sans-serif;font-weight:700;font-size:22px;border-radius:10px;padding:4px 12px;line-height:1.3}
+.promo strong{font-size:17px;display:block;line-height:1.4}
+.promo small{color:#B9C6D8;font-size:13.5px}
+.cd{display:flex;gap:8px;direction:rtl}
+.cd div{background:rgba(255,255,255,.08);border:1px solid rgba(18,194,233,.45);border-radius:9px;min-width:58px;text-align:center;padding:5px 6px}
+.cd b{display:block;font-family:"Readex Pro",sans-serif;font-size:22px;line-height:1.2;font-variant-numeric:tabular-nums}
+.cd span{font-size:11.5px;color:#9FB0C7}
+.promo .pbtns{display:flex;gap:8px;flex-wrap:wrap}
+.btn-cyan{display:inline-flex;align-items:center;justify-content:center;background:var(--cyan);color:var(--cyan-ink);font-weight:700;text-decoration:none;padding:10px 16px;border-radius:8px;font-size:15px;white-space:nowrap}
+/* closing CTA */
+.close-cta{background:var(--navy);color:#fff;border-radius:16px;padding:32px;display:grid;grid-template-columns:1.3fr 1fr;gap:28px;align-items:center}
+.close-cta h2{color:#fff;margin:0 0 8px}
+.close-cta p{color:#B9C6D8;margin:0 0 14px}
+.close-cta ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.close-cta li{padding-inline-start:26px;position:relative;color:#E6EEF7}
+.close-cta li::before{content:"";position:absolute;inset-inline-start:0;top:.5em;width:13px;height:7px;border-left:2.5px solid var(--cyan);border-bottom:2.5px solid var(--cyan);transform:rotate(-45deg)}
+.close-cta .side{display:grid;gap:10px}
+.close-cta .side .wa-btn,.close-cta .side .btn-cyan{justify-content:center;padding:14px;font-size:16px}
+.close-cta .side small{color:#9FB0C7;text-align:center;font-size:13px}
+@media (max-width:900px){.close-cta{grid-template-columns:1fr}}
+@media (max-width:520px){
+  .promo .wrap{justify-content:center;text-align:center}
+  .promo .pmsg{justify-content:center}
+  .cd div{min-width:52px}
+  .promo .pbtns{width:100%}
+  .promo .pbtns a{flex:1}
+  .close-cta{padding:22px}
+}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
 </style>
 </head>
@@ -173,6 +206,25 @@ footer .copy{width:100%;font-size:13px;color:#7F92AA;border-top:1px solid #1F335
       <span>كلمنا واتساب</span></a>
   </div>
 </header>
+
+<div class="promo" id="promo" hidden>
+  <div class="wrap">
+    <div class="pmsg">
+      <span class="pct" id="promo-pct">40%</span>
+      <div><strong>خصم 40% على أول مشروع ليك معانا</strong><small id="promo-until">اطلب عرض سعرك قبل 13 ديسمبر 2026</small></div>
+    </div>
+    <div class="cd" role="timer" aria-label="الوقت المتبقي على نهاية الخصم">
+      <div><b id="cd-d">00</b><span>يوم</span></div>
+      <div><b id="cd-h">00</b><span>ساعة</span></div>
+      <div><b id="cd-m">00</b><span>دقيقة</span></div>
+      <div><b id="cd-s">00</b><span>ثانية</span></div>
+    </div>
+    <div class="pbtns">
+      <a class="btn-cyan" href="#calc">احسب سعرك بعد الخصم</a>
+      <a class="wa-btn" id="wa-promo" href="https://wa.me/201104549752" rel="noopener">احجز الخصم على واتساب</a>
+    </div>
+  </div>
+</div>
 
 <main>
 <section class="hero">
@@ -281,6 +333,27 @@ footer .copy{width:100%;font-size:13px;color:#7F92AA;border-top:1px solid #1F335
     <details><summary>بعد ما المشروع يخلص، مين يتابعه؟</summary><p>إحنا. بنقدم دعم فني وصيانة، وتطوير لأي مميزات جديدة تحتاجها بعدين.</p></details>
   </div>
 </section>
+<section class="block" id="start" style="padding-top:0">
+  <div class="wrap">
+    <div class="close-cta">
+      <div>
+        <h2>جاهز تبدأ مشروعك؟ الخصم مستنيك</h2>
+        <p>ابعتلنا فكرتك النهارده، ونرجعلك بتصور وسعر واضح. كل اللي محتاجه رسالة واحدة.</p>
+        <ul>
+          <li>استشارة وتصور مبدئي مجانًا، من غير أي التزام</li>
+          <li>سعر نهائي ثابت ومكتوب قبل ما نبدأ</li>
+          <li>دفع على مراحل، كل مرحلة بعد ما تشوف الشغل</li>
+          <li>دعم وتطوير بعد الإطلاق</li>
+        </ul>
+      </div>
+      <div class="side">
+        <a class="btn-cyan" href="#calc">اطلب عرض سعر بخصم 40%</a>
+        <a class="wa-btn" id="wa-close" href="https://wa.me/201104549752" rel="noopener">كلمني على واتساب دلوقتي</a>
+        <small id="close-until">الخصم ساري لحد 13 ديسمبر 2026</small>
+      </div>
+    </div>
+  </div>
+</section>
 </main>
 
 <footer>
@@ -369,10 +442,11 @@ function state(){
   const pct = 100 - (offerActive() ? DISCOUNT : 0);
   return { type, design, market, feats, lo, hi, dlo: round(lo * pct / 100), dhi: round(hi * pct / 100), cur:m.cur, weeks:[w[0] + extra, w[1] + extra] };
 }
+function offerEnd(){ return new Date(DISCOUNT_UNTIL + "T23:59:59+02:00").getTime(); }  /* آخر ثانية في اليوم بتوقيت القاهرة */
 function offerActive(){
   if (!DISCOUNT) return false;
   if (!DISCOUNT_UNTIL) return true;
-  return new Date() <= new Date(DISCOUNT_UNTIL + "T23:59:59");
+  return Date.now() <= offerEnd();
 }
 function showOffer(){
   const on = offerActive();
@@ -383,6 +457,30 @@ function showOffer(){
     "· لحد " + new Date(DISCOUNT_UNTIL + "T12:00:00").toLocaleDateString("ar-EG", {day:"numeric", month:"long"});
 }
 showOffer();
+/* شريط العرض والعداد التنازلي */
+(function promo(){
+  const band = document.getElementById("promo");
+  if (!offerActive() || !DISCOUNT_UNTIL) { band.hidden = true; return; }
+  band.hidden = false;
+  const dateTxt = new Date(DISCOUNT_UNTIL + "T12:00:00+02:00").toLocaleDateString("ar-EG", {day:"numeric", month:"long", year:"numeric", timeZone:"Africa/Cairo"});
+  document.getElementById("promo-pct").textContent = `${DISCOUNT}%`;
+  band.querySelector("strong").textContent = `خصم ${DISCOUNT}% على أول مشروع ليك معانا`;
+  document.getElementById("promo-until").textContent = `اطلب عرض سعرك قبل ${dateTxt}`;
+  document.getElementById("offer").style.display = "none";  /* الشريط بيغني عن شارة الخصم اللي فوق العنوان */
+  document.getElementById("close-until").textContent = `الخصم ساري لحد ${dateTxt}`;
+  const el = id => document.getElementById(id), pad = n => String(n).padStart(2, "0");
+  function tick(){
+    const left = offerEnd() - Date.now();
+    if (left <= 0) { band.hidden = true; showOffer(); render(); return; }
+    const s = Math.floor(left / 1000);
+    el("cd-d").textContent = pad(Math.floor(s / 86400));
+    el("cd-h").textContent = pad(Math.floor(s % 86400 / 3600));
+    el("cd-m").textContent = pad(Math.floor(s % 3600 / 60));
+    el("cd-s").textContent = pad(s % 60);
+    setTimeout(tick, 1000);
+  }
+  tick();
+})();
 function render(){
   const s = state();
   const fmtR = (a,b) => `${a.toLocaleString("en-US")} – ${b.toLocaleString("en-US")} ${s.cur}`;
@@ -393,6 +491,8 @@ function render(){
   document.getElementById("price-label").textContent = on ? `التكلفة بعد خصم ${DISCOUNT}%` : "التكلفة التقريبية";
   document.getElementById("time").textContent = `${s.weeks[0]} إلى ${s.weeks[1]} أسابيع`;
   document.getElementById("wa-top").href = document.getElementById("wa-float").href = waLink("أهلًا، عايز أستفسر عن خدماتكم.");
+  const offerMsg = offerActive() ? `أهلًا عتاد، عايز أحجز خصم ${DISCOUNT}% على أول مشروع وأعرف عرض السعر.` : "أهلًا عتاد، عايز عرض سعر لمشروعي.";
+  document.getElementById("wa-promo").href = document.getElementById("wa-close").href = waLink(offerMsg);
 }
 function waLink(text){ return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(text)}` }
 function message(){
@@ -411,7 +511,7 @@ function message(){
 }
 form.addEventListener("change", render);
 form.addEventListener("submit", e => { e.preventDefault(); trackLead("calculator"); window.open(waLink(message()), "_blank", "noopener"); });
-["wa-top", "wa-float"].forEach(id => document.getElementById(id).addEventListener("click", () => trackLead("whatsapp")));
+["wa-top", "wa-float", "wa-promo", "wa-close"].forEach(id => document.getElementById(id).addEventListener("click", () => trackLead("whatsapp")));
 render();
 document.getElementById("yr").textContent = new Date().getFullYear();
 </script>
