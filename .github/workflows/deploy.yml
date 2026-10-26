@@ -25,9 +25,9 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - run: mkdir _site && cp -r *.html sitemap.xml */ _site/
+      # الصفحات جاهزة في جذر الريبو، فبنرفعها زي ما هي
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: _site
+          path: .
       - id: deployment
         uses: actions/deploy-pages@v4
